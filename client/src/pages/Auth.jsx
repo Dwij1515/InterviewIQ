@@ -13,6 +13,10 @@ function Auth({ isModel = false }) {
     const dispatch = useDispatch()
 
     const handleGoogleAuth = async () => {
+        if (!auth || !provider) {
+            alert("Firebase has not been initialized. Please ensure that you have added the VITE_FIREBASE_APIKEY environment variable in your Vercel Project Settings, then triggered a new redeployment.");
+            return;
+        }
         try {
             const response = await signInWithPopup(auth, provider)
             let User = response.user
