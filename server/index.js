@@ -14,10 +14,29 @@ import paymentRouter from "./routes/payment.route.js"
 
 const app = express()
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            process.env.FRONTEND_URL
+        ].filter(Boolean).map(url => url.replace(/\/$/, ""));
+        
+        const isVercel = origin.endsWith(".vercel.app");
+        const isLocalhost = origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:");
+        
+        const isAllowed = allowedOrigins.includes(origin) || 
+                          allowedOrigins.includes(origin.replace("https://", "").replace("http://", "")) ||
+                          isVercel || 
+                          isLocalhost;
+                          
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    },
     credentials:true
 }))
 
