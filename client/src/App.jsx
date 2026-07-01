@@ -12,7 +12,9 @@ import Pricing from './pages/Pricing'
 import InterviewReport from './pages/InterviewReport'
 import ATSAnalyzer from './pages/ATSAnalyzer'
 
-export const ServerUrl  = "http://localhost:8000"
+export const ServerUrl = import.meta.env.MODE === "production"
+  ? "https://interviewiq-ckp5.onrender.com"
+  : "http://localhost:8000"
 
 function App() {
 
